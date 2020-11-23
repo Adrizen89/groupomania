@@ -3,7 +3,7 @@ console.log('Connexion à la base de données...');
 let connectdb = mysql.createConnection({ 
     host: 'localhost', 
     user: 'root', 
-    password: '', 
+    password: 'sbteam', 
     database: 'groupomania_database', 
 });
 connectdb.connect(function(err) { 
