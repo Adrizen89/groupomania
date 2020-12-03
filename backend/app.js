@@ -18,6 +18,7 @@ app.use((req, res, next) => {
     next();
 });
 
+//import des routes
 app.use('/api/posts', routesPosts);
 app.use('/api/auth', routesUsers);
 app.use('/api/moderation', routesMod);

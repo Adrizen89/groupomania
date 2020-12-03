@@ -68,7 +68,9 @@ export default {
             dataSignupS: "", 
             form: true,
             msg: false,
-            message: ""
+            message: "",
+
+            dialog:""
         }
     },
     methods: {
@@ -82,9 +84,10 @@ export default {
                 this.msg = true;
             })
             .catch(error => {
-                console.log(error);
+                
                 this.message = error;
                 this.msg = true; 
+                console.log(error);
                 });
         }
     }

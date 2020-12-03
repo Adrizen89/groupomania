@@ -36,10 +36,7 @@
 
 
                     <v-card-text class="py-0">
-                        <v-btn icon fab title="J'aime" class="ma-3" color="green"  @click="likePost(post.id, post.likes)">
-                                <v-icon>mdi-thumb-up</v-icon>
-                                {{ post.likes }}
-                        </v-btn> 
+                        
                             
                         <v-btn text @click="afficheCom(post.id)" title="Voir les commentaires">
                             <v-icon>mdi-comment-eye</v-icon>
@@ -153,13 +150,6 @@ export default {
                 userId: ""
             },
             dataComS: "",
-            dataLike:{
-                userId: "",
-                nbLikes: "",
-                postId: "",
-                liked: false,
-            },
-            dataLikeS: "",
             form: true
             
             
@@ -270,32 +260,6 @@ export default {
         afficheFormCom(){
             this.afficheFrmCm = true
         },
-
-        likePost(postId, nbLikes){
-            this.allLikes.forEach(element => {
-                if(element.postId == postId && element.userId == localStorage.userId){
-                    this.dataLike.nbLikes = nbLikes+-1;
-                    this.dataLike.liked = true;
-                }
-            });
-            if(this.dataLike.liked == false){
-                this.dataLike.nbLikes = nbLikes+1;
-            }
-            this.dataLike.userId = localStorage.userId;
-            this.dataLike.postId = postId;
-            this.dataLikeS = JSON.stringify(this.dataLike);
-            axios.post("http://localhost:3000/api/posts/" + postId + "/like", this.dataLikeS, {headers: {'Content-Type': 'application/json', Authorization: 'Bearer ' + localStorage.token}})
-                .then(response => {
-                    let rep = JSON.parse(response.data);
-                    console.log(rep.message);
-                    this.dataLike.liked = false;
-                    window.location.assign('http://localhost:8080/Accueil/forum');
-                })
-                .catch(error => {
-                    console.log(error);
-                    this.dataLike.liked = false;
-                })
-        },
     },
     components: {
         "top-header": TopHeader, 
@@ -333,3 +297,4 @@ export default {
         }
    }
 </style>
+

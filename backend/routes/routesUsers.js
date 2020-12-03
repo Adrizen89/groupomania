@@ -6,6 +6,7 @@ const auth = require('../middleware/auth');
 const multer = require('../middleware/multer-config');
 
 const userCtrl = require('../controllers/user');
+const schemaPassword = require('../middleware/schemaPasswordValidator');
 
 try{
     router.post('/signup', userCtrl.signup);

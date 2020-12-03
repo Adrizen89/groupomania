@@ -13,6 +13,13 @@
                     <v-textarea v-model="dataPost.content" color="black" :rules="contentRules" label="Message" required></v-textarea>
                 </v-form>
             </v-card-text>
+            <div class="file-upload-form">
+                Upload an image file:
+                <input type="file" @change="previewImage" accept="image/*">
+            </div>
+            <div class="image-preview" v-if="imageData.length > 0">
+                <img class="preview" :src="imageData">
+            </div>
             
 
             <v-card-actions>

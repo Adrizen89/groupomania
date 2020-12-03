@@ -13,10 +13,13 @@ exports.getAllPosts = (req, res, next) => {
         });
 }
 exports.createPost = (req, res, next) => { 
+    let varImage = "";
+    if (req.file) { varImage = `${req.protocol}://${req.get("host")}/images/${req.file.filename}` };
     let title = req.body.title;
     let userId = req.body.userId;
     let content = req.body.content;
-    let sqlInserts = [userId, title, content];
+    let msgImg = varImage;
+    let sqlInserts = [userId, title, content, msgImg];
     postsModels.createPost(sqlInserts)
         .then((response) => {
             res.status(201).json(JSON.stringify(response));

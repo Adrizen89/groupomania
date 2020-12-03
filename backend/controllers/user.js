@@ -2,31 +2,40 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const connectdb = require('../connectdb.js');
 const mysql = require('mysql');
-const UserModels = require ('../Models/UserModels.js')
+const UserModels = require ('../Models/UserModels.js');
+const schema = require('../middleware/schemaPasswordValidator');
+const { response } = require('../app.js');
 
 let userModels = new UserModels();
 
-
+//      Fonction s'inscrire
 exports.signup = (req, res, next) => {
     let email = req.body.email;
 	let password = req.body.password;
 	let firstName = req.body.firstName;
     let lastName = req.body.lastName;
-    bcrypt.hash(password, 10)
+    if (!schema.validate(password)) {
+        return res.status(400).json({ error: "Merci de bien vouloir de rentrer un mot de passe valide !" });
+    } else if (schema.validate(password)) {
+        bcrypt
+        .hash(password, 10) // hashage + salage du password 
         .then (hash => {
-            let sqlInserts = [lastName, firstName, email, hash];
+            let sqlInserts = [lastName, firstName, email, hash]; //ajout des valeurs dans un tableau = sqlInserts
             userModels.signup(sqlInserts)
                 .then((response) =>{
-                    res.status(201).json(JSON.stringify(response))
+                    res.status(201).json(JSON.stringify(response))//si ok user créé
                 })
                 .catch((error) =>{
                     console.error(error);
-                    res.status(400).json({error})
+                    res.status(400).json({error})//sinon erreur 
                 })
         })
         .catch(error => res.status(500).json(error)) 
+    }
+    
 };
 
+//      Fonction se connecter
 exports.login = (req, res, next) => {
     let email = req.body.email;
     let password = req.body.password;
