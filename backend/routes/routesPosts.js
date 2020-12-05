@@ -16,6 +16,8 @@ try{
     router.get('/likes', auth, postsCtrl.getAllLikes);
     router.post('/:id/like', auth, postsCtrl.postLike);
 
+    
+
 }catch (error){
     console.log(error);
 } 
