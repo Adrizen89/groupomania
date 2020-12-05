@@ -17,7 +17,7 @@
            
 
             <v-card-actions>
-                <v-btn label="file" @change="onFileChange()" type="file" ref="file" name="image" id="file" accept=".jpg, .jpeg, .gif, .png">Charger une image</v-btn>
+                
                 <v-btn  :disabled="!valid" class="success" @click="sendPost">Poster</v-btn>
                 <v-btn text href="/Accueil/Forum" color="black">Annuler</v-btn>
             </v-card-actions>
@@ -51,20 +51,11 @@ export default {
             dataPostS: "",
             msg: false,
             message: "",
-            newImage: "",
-            file: "",
         }
     },
     methods: {
-        onFileChange(evt) {
-            const files = evt.target.files;
-            if (!files.lenght) return;
-            const reader = new FileReader();
-            reader.readAsDataURL(files[0]);
-            reader.onload = (evt) => {
-                this.contentRules = evt.target.result;
-            };
-        },
+       
+        
         sendPost(){
             this.dataPostS = JSON.stringify(this.dataPost);
             axios.post("http://localhost:3000/api/posts/", this.dataPostS, {headers: {'Content-Type': 'application/json', Authorization: 'Bearer ' + localStorage.token}})

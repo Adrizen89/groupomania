@@ -119,7 +119,6 @@ export default {
             admin: "",
             afficheFrmCm: false,
             allPosts: [],
-            allLikes: [],
             allComments: [],
             postId: "",
             dialogUpCom: false,
