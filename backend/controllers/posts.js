@@ -16,8 +16,7 @@ exports.createPost = (req, res, next) => {
     let title = req.body.title;
     let userId = req.body.userId;
     let content = req.body.content;
-    let imageUrl = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`
-    let sqlInserts = [userId, title, content, imageUrl];
+    let sqlInserts = [userId, title, content];
     postsModels.createPost(sqlInserts)
         .then((response) => {
             res.status(201).json(JSON.stringify(response));

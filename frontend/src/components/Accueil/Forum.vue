@@ -224,7 +224,7 @@ export default {
                     this.dataPost.userId = "";
                     this.dataPost.id = "";
                     this.dialogUpPost = false;
-                    window.location.assign('http://localhost:8080/Accueil/forum');
+                    window.location.assign('/Accueil/forum');
                 })
                 .catch(error => {
                     console.log(error);
@@ -273,14 +273,6 @@ export default {
             .catch(error => {
             console.log(error); 
             });
-        axios.get("http://localhost:3000/api/posts/likes", {headers: {Authorization: 'Bearer ' + localStorage.token}})
-            .then(response =>{
-                let likes = JSON.parse(response.data);
-                this.allLikes = likes;
-            })
-            .catch(error => {
-                console.log(error)
-            }); 
     },
 }
 </script>

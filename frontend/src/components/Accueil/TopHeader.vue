@@ -19,7 +19,7 @@
                         
                     <v-list-item-content>
                         <v-list-item-title>
-                            Intranet Groupomania
+                            Groupomania
                         </v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>

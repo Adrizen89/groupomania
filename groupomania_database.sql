@@ -42,40 +42,9 @@ CREATE TABLE `comments` (
 
 LOCK TABLES `comments` WRITE;
 /*!40000 ALTER TABLE `comments` DISABLE KEYS */;
-INSERT INTO `comments` VALUES (47,70,71,'2020-08-27 22:07:54','Mais oui C\'est trop bien !'),(48,41,72,'2020-08-27 22:12:47','Hello <3');
 /*!40000 ALTER TABLE `comments` ENABLE KEYS */;
 UNLOCK TABLES;
 
---
--- Table structure for table `likes`
---
-
-DROP TABLE IF EXISTS `likes`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `likes` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `postId` int unsigned NOT NULL,
-  `userId` int unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `userId` (`userId`),
-  KEY `fk_like_postId` (`postId`),
-  CONSTRAINT `fk_like_postId` FOREIGN KEY (`postId`) REFERENCES `posts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_like_userId` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_likes_postId` FOREIGN KEY (`postId`) REFERENCES `posts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_likes_userId` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `likes`
---
-
-LOCK TABLES `likes` WRITE;
-/*!40000 ALTER TABLE `likes` DISABLE KEYS */;
-INSERT INTO `likes` VALUES (27,71,41),(29,70,42),(30,70,70),(31,72,70),(32,71,70),(33,70,41),(34,72,41);
-/*!40000 ALTER TABLE `likes` ENABLE KEYS */;
-UNLOCK TABLES;
 
 --
 -- Table structure for table `posts`
@@ -102,7 +71,6 @@ CREATE TABLE `posts` (
 
 LOCK TABLES `posts` WRITE;
 /*!40000 ALTER TABLE `posts` DISABLE KEYS */;
-INSERT INTO `posts` VALUES (70,40,'Bienvenue sur le forum de Groupomania !','Bonjour à toutes et tous :)\nAdrien','2020-08-27 19:25:25',3);
 /*!40000 ALTER TABLE `posts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -131,7 +99,6 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (40,'Guyot','Christelle','admin@groupomania.com','$2y$10$lskfADZHrmzpumIKxBcVjemgzOufeVPzf4aau2WfO4p5Nj8irqNjG',1),(41,'Sthylo','Olivier','olivier@groupomania.com','$2b$10$0PnpnmMz0okdFd4DnJp1guQtuqcaIYkgQXPYJn93ES6QKkEofOhvu',NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

@@ -13,8 +13,6 @@ try{
     router.delete('/:id', auth, postsCtrl.deletePost); 
 
     
-    router.get('/likes', auth, postsCtrl.getAllLikes);
-    router.post('/:id/like', auth, postsCtrl.postLike);
 
     
 
