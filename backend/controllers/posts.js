@@ -70,7 +70,8 @@ exports.createComment = (req, res, next) => {
     let postId = req.params.id;
     let userId = req.body.userId;
     let content = req.body.content;
-    let sqlInserts = [userId, postId, content];
+    let imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    let sqlInserts = [userId, postId, content, imageUrl];
     postsModels.createComment(sqlInserts)
         .then((response) =>{
             res.status(201).json(JSON.stringify(response));
@@ -119,24 +120,6 @@ exports.deleteComment = (req, res, next) => {
         })
 }
 
-
-exports.getAllLikes = (req, res, next) =>{
-     postsModels.getAllLikes()
-        .then((response) =>{
-            res.status(200).json(JSON.stringify(response));
-        })
-}
-exports.postLike = (req, res, next) => {
-    let userId = req.body.userId;
-    let nbLikes = req.body.nbLikes;
-    let postId = req.body.postId;
-    let sqlInserts1 = [postId, userId];
-    let sqlInserts2 = [nbLikes,postId];
-    postsModels.postLike(sqlInserts1, sqlInserts2, req.body.liked)
-        .then((response) =>{
-            res.status(201).json(JSON.stringify(response))
-        }) 
-}
 
 
 

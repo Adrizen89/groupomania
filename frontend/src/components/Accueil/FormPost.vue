@@ -11,6 +11,8 @@
                 <v-form ref="form" class="ma-3" v-model="valid" >
                     <v-text-field v-model="dataPost.title" color="black" :rules="titleRules" :counter="50" label="Titre" autofocus required></v-text-field>
                     <v-textarea v-model="dataPost.content" color="black" :rules="contentRules" label="Message" required></v-textarea>
+                    <v-file-input label="Choisir une image" v-model="file" ref="file" name="image" style="max-height: 100px;margin-top 10px" @change="imageInput">Choisir une image</v-file-input>
+
                 </v-form>
             </v-card-text>
             
@@ -53,11 +55,18 @@ export default {
         }
     },
     methods: {
-       
+        imageInput(){
+            this.file = this.$refs.file.files[0];
+            this.img = URL.createObjectURL(this.file);
+        },
         
         sendPost(){
             this.dataPostS = JSON.stringify(this.dataPost);
-            axios.post("http://localhost:3000/api/posts/", this.dataPostS, {headers: {'Content-Type': 'application/json', Authorization: 'Bearer ' + localStorage.token}})
+            axios.post("http://localhost:3000/api/posts/", 
+            this.dataPostS, 
+            {headers: 
+            {'Content-Type': 'application/json', 
+            Authorization: 'Bearer ' + localStorage.token}})
                 .then(response => {
                     let rep = JSON.parse(response.data);
                     this.message = rep.message;

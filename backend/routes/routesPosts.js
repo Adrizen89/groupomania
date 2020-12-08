@@ -12,7 +12,10 @@ try{
     router.put('/:id', auth, multer, postsCtrl.updatePost);
     router.delete('/:id', auth, postsCtrl.deletePost); 
 
-    
+    router.get('/', auth, postsCtrl.getComments);
+    router.post('/', auth, postsCtrl.createComment);
+    router.put('/', auth, postsCtrl.updateComment);
+    router.delete('/', auth, postsCtrl.deleteComment);
 
     
 
