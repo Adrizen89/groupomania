@@ -1,7 +1,8 @@
 const connectdb = require('../connectdb.js');
 const mysql = require('mysql');
 const jwt = require('jsonwebtoken');
-const PostsModels = require ('../Models/PostsModels.js')
+const PostsModels = require ('../Models/PostsModels.js');
+const multer = require ('../middleware/multer-config');
 
 let postsModels = new PostsModels();
 
@@ -15,12 +16,17 @@ exports.getAllPosts = (req, res, next) => {
 exports.createPost = (req, res, next) => { 
     let title = req.body.title;
     let userId = req.body.userId;
-    let content = req.body.content;
+    let content = req.body.content; 
+    let imgUrl = req.file.filename;
     let sqlInserts = [userId, title, content];
-    postsModels.createPost(sqlInserts)
+    if (req.files && req.files.lenght === 1){
+        postsModels.createPost(sqlInserts)
+        imgUrl: `${req.protocol}://${req.get('host')}/file/${req.file.filename}`
         .then((response) => {
             res.status(201).json(JSON.stringify(response));
         })
+    }
+    
 }
 exports.updatePost = (req, res, next) => {
     const token = req.headers.authorization.split(' ')[1];
