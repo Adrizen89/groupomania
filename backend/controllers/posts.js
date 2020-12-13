@@ -17,7 +17,7 @@ exports.createPost = (req, res, next) => {
     let title = req.body.title;
     let userId = req.body.userId;
     let content = req.body.content; 
-    let imgUrl = req.file.filename;
+    let imgUrl = req.body.imgUrl;
     let sqlInserts = [userId, title, content];
     if (req.files && req.files.lenght === 1){
         postsModels.createPost(sqlInserts)

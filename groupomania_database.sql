@@ -49,6 +49,7 @@ CREATE TABLE `posts` (
   `userId` int unsigned NOT NULL,
   `title` varchar(50) NOT NULL,
   `content` text NOT NULL,
+  `imgUrl` varchar(150),
   `date` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_userId` (`userId`),
