@@ -21,7 +21,7 @@ exports.createPost = (req, res, next) => {
     let sqlInserts = [userId, title, content];
     if (req.files && req.files.lenght === 1){
         postsModels.createPost(sqlInserts)
-        imgUrl: `${req.protocol}://${req.get('host')}/file/${req.file.filename}`
+        imgUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
         .then((response) => {
             res.status(201).json(JSON.stringify(response));
         })

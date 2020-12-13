@@ -126,8 +126,8 @@ export default {
 
     .img {
         &--inside {
-            width: 100%;
-            height: 100%;
+            width: 15%;
+            height: auto;
         }
     }
 </style>

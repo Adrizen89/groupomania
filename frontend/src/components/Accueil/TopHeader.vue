@@ -2,7 +2,7 @@
     <div class="head">
         <v-navigation-drawer
             v-model="drawer"
-            color="black"
+            color=#1A5276
             expand-on-hover
             mini-variant
             mini-variant-width=45
@@ -98,14 +98,12 @@ export default {
         
     }
     a:hover {
-        color: #F13E18!important;
-        text-decoration: underline;     
+        opacity: 0.6;   
     }
     .lien {
         cursor: pointer;
     }
     .lien:hover {
-        color: #F13E18!important;
-        text-decoration: underline;
+        opacity: 0.6;
     }
 </style>
