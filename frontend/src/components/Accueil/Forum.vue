@@ -3,12 +3,12 @@
 
         <top-header/>
         <div class="ml-12">
-            <h1 class="ma-4">Forum</h1>
+            <h1 class="ma-4" style="color:#154360">Forum</h1>
             
 
             <router-view></router-view>
             <v-container >
-                <v-btn class="ma-3" color="black white--text" @click="afficheForm">Créer un post</v-btn>
+                <v-btn class="ma-3"  @click="afficheForm">Créer un post</v-btn>
                 
                 <v-card class="forum__post ma-3 mt-6" v-for="(post, index) in allPosts" v-bind:key="index">
                     <div class="d-flex justify-space-between">
@@ -16,7 +16,7 @@
                             <h2 class="forum__post__title ml-0">{{ post.title }}</h2>
                         </v-card-title>
                         <v-card-actions class=" forum__post__manage" v-if="post.userId == userId">
-                            <v-btn class="forum__post__manage--btn" color="black" title="modifier le post" @click.stop="goDialogUpPost(post.title, post.content, post.id)" icon>
+                            <v-btn class="forum__post__manage--btn" color="black" title="modifier le post" @click.stop="goDialogUpPost(post.title, post.content, post.id, post.imgUrl)" icon>
                                 <v-icon>mdi-pencil</v-icon>
                             </v-btn>
                             <v-btn class="forum__post__manage--btn" color="black" title="supprimer le post" @click="deletePost(post.id)" icon>
@@ -33,6 +33,10 @@
                     <v-card-text class="v-card-text black--text forum__post__content" >
                         {{ post.content }}
                     </v-card-text>
+
+                    <v-img> 
+                        {{ post.imgUrl }}             
+                     </v-img>
 
 
                     <v-card-text class="py-0">
@@ -140,6 +144,7 @@ export default {
                 id: "",
                 title:"",
                 content:"",
+                imgUrl:"",
                 userId:"",
             },
             dataPostS: "",
@@ -206,10 +211,11 @@ export default {
                     console.log(error);
                 })
         },
-        goDialogUpPost(postTitle, postContent, postId){
+        goDialogUpPost(postTitle, postContent, postId, postImgUrl){
             this.dataPost.title = postTitle;
             this.dataPost.content = postContent;
             this.dataPost.id = postId;
+            this.dataPost.imgUrl = postImgUrl;
             this.dialogUpPost = true;
         },
         updatePost(){
@@ -221,6 +227,7 @@ export default {
                     console.log(rep.message);
                     this.dataPost.title = "";
                     this.dataPost.content = "";
+                    this.dataPost.imgUrl = "";
                     this.dataPost.userId = "";
                     this.dataPost.id = "";
                     this.dialogUpPost = false;
@@ -279,7 +286,9 @@ export default {
 <style lang="scss">
     h1{
         text-align: center;
+        color: #154360;
     }
+    
     .forum{
         &__comments{
             &--ind{

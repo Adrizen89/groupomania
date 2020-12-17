@@ -17,15 +17,21 @@ exports.createPost = (req, res, next) => {
     let title = req.body.title;
     let userId = req.body.userId;
     let content = req.body.content; 
-    let imgUrl = req.body.imgUrl;
-    let sqlInserts = [userId, title, content];
+    let imgUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+    let sqlInserts = [userId, title, content, imgUrl];
+
     if (req.files && req.files.lenght === 1){
         postsModels.createPost(sqlInserts)
-        imgUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-        .then((response) => {
-            res.status(201).json(JSON.stringify(response));
+        .then(sqlInserts => {
+            res.send(sqlInserts);
         })
-    }
+        .catch(err => {
+            res.status(500).send({
+                message : err.message || "une erreur est survenue lors de la creation du post !"
+            });
+        });
+    };
+    
     
 }
 exports.updatePost = (req, res, next) => {
@@ -76,8 +82,7 @@ exports.createComment = (req, res, next) => {
     let postId = req.params.id;
     let userId = req.body.userId;
     let content = req.body.content;
-    let imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-    let sqlInserts = [userId, postId, content, imageUrl];
+    let sqlInserts = [userId, postId, content];
     postsModels.createComment(sqlInserts)
         .then((response) =>{
             res.status(201).json(JSON.stringify(response));

@@ -37,6 +37,12 @@ CREATE TABLE `comments` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 
+
+LOCK TABLES `comments` WRITE;
+INSERT INTO `comments` VALUES (47,80,72, '2020-12-05 19:55:45', 'Super !');
+UNLOCK TABLES;
+
+
 --
 -- Table structure for table `posts`
 --
@@ -49,6 +55,7 @@ CREATE TABLE `posts` (
   `userId` int unsigned NOT NULL,
   `title` varchar(50) NOT NULL,
   `content` text NOT NULL,
+  `imgUrl` varchar(200),
   `date` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_userId` (`userId`),
@@ -78,8 +85,10 @@ CREATE TABLE `users` (
 
 
 LOCK TABLES `posts` WRITE;
-INSERT INTO `posts` VALUES (80,72,'Bienvenue', 'Bienvenue sur le réseau social de Groupomania !\nAdrien', '2020-12-05 19:45:45');
+INSERT INTO `posts` VALUES (80,72,'Bienvenue', 'Bienvenue sur le réseau social de Groupomania !\nAdrien', '',  '2020-12-05 19:45:45');
 UNLOCK TABLES;
+
+
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;

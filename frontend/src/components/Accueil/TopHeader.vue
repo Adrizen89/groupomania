@@ -18,7 +18,7 @@
                     </v-list-item-avatar>
                         
                     <v-list-item-content>
-                        <v-list-item-title>
+                        <v-list-item-title class="title_main">
                             Groupomania
                         </v-list-item-title>
                     </v-list-item-content>
@@ -105,5 +105,8 @@ export default {
     }
     .lien:hover {
         opacity: 0.6;
+    }
+    .title_main{
+        color: white;
     }
 </style>

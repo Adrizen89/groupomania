@@ -8,10 +8,10 @@
             </v-card-title>
             
             <v-card-text>
-                <v-form ref="form" class="ma-3" v-model="valid" >
+                <v-form @submit.prevent="sendPost" id="form" ref="form" class="ma-3" v-model="valid" >
                     <v-text-field v-model="dataPost.title" color="black" :rules="titleRules" :counter="50" label="Titre" autofocus required></v-text-field>
                     <v-textarea v-model="dataPost.content" color="black" :rules="contentRules" label="Message" required></v-textarea>
-                    <v-file-input accept="image/png, image/jpg" hide-input prepend-icon="mdi-image-plus" v-model="image" @change="parseImg($event)"> </v-file-input>
+                    <v-file-input name="file" accept="image/png, image/jpg" hide-input prepend-icon="mdi-image-plus" v-model="image" > </v-file-input>
 
                 </v-form>
             </v-card-text>
@@ -19,7 +19,7 @@
 
             <v-card-actions>
                 
-                <v-btn  :disabled="!valid" class="success" @click="sendPost">Poster</v-btn>
+                <v-btn form="form" :disabled="!valid" type="submit" class="success" >Poster</v-btn>
                 <v-btn text href="/Accueil/Forum" color="black">Annuler</v-btn>
                 
       <div class="img-block mx-auto">
@@ -89,15 +89,19 @@ export default {
             this.img = URL.createObjectURL(this.file);
         },
         
-        sendPost(){
+        sendPost(evt){
+            let body = new FormData();
+            body.append("file", evt.target[3].files[0]);
+            body.append("title", this.dataPost.title);
+            body.append("content", this.dataPost.content);
+            body.append("userId", this.dataPost.userId);
             this.dataPostS = JSON.stringify(this.dataPost);
             axios.post("http://localhost:3000/api/posts/", 
-            this.dataPostS, 
+            body, 
             {headers: 
             {'Content-Type': 'application/json', 
             Authorization: 'Bearer ' + localStorage.token}})
                 .then(response => {
-                    let body = new FormData;
                     let rep = JSON.parse(response.data);
                     this.message = rep.message;
                     this.msg = true;
