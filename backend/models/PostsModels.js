@@ -16,11 +16,12 @@ class PostsModels {
         })
     }
     createPost(sqlInserts){
-        let sql = 'INSERT INTO posts VALUES(NULL, userId, title, content, imgUrl, NOW())';
-        sql = mysql.format(sql, sqlInserts);
+        console.log(sqlInserts)
+        let sql = 'INSERT INTO posts VALUES ?, ?, ?, ?, NOW()';
+        //sql = mysql.format(sql, sqlInserts);
         return new Promise((resolve) =>{
-            connectdb.query(sql, function (err, result, fields) {
-                if (err) throw err;
+            connectdb.query(sql, sqlInserts, function (err, result, fields) {
+                if (err) console.log(err, "test");
                 resolve({message : 'Nouveau post !'});
             })       
         })

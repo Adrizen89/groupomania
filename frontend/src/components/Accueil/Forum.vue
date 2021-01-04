@@ -34,8 +34,8 @@
                         {{ post.content }}
                     </v-card-text>
 
-                    <v-img> 
-                        {{ post.imgUrl }}             
+                    <v-img v-if="dataPost.imgUrl !=null"
+                    :alt="'Image du Post'">           
                      </v-img>
 
 
@@ -112,7 +112,6 @@
 
 <script>
 import TopHeader from "./TopHeader"
-
 import axios from "axios"
 
 export default {
@@ -154,7 +153,9 @@ export default {
                 userId: ""
             },
             dataComS: "",
-            form: true
+            form: true,
+
+            postDetails: this.post
             
             
         }
@@ -271,15 +272,25 @@ export default {
         "top-header": TopHeader, 
     },
     mounted(){
+       /* const posts = document.getElementsByClassName("forum");
+    posts.forEach(() => {
+      if (
+        storage.getStorage("userId") != this.post.userId &&
+        storage.getStorage("idAdmin") == "false"
+      ) 
+    }); */
         this.userId = localStorage.userId;
         axios.get("http://localhost:3000/api/posts", {headers: {Authorization: 'Bearer ' + localStorage.token}})
             .then(response => {
+
                 let posts = JSON.parse(response.data);
                 this.allPosts = posts;
+                console.log(posts, "test");
             })
             .catch(error => {
             console.log(error); 
             });
+        
     },
 }
 </script>

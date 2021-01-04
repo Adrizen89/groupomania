@@ -11,7 +11,7 @@
                 <v-form @submit.prevent="sendPost" id="form" ref="form" class="ma-3" v-model="valid" >
                     <v-text-field v-model="dataPost.title" color="black" :rules="titleRules" :counter="50" label="Titre" autofocus required></v-text-field>
                     <v-textarea v-model="dataPost.content" color="black" :rules="contentRules" label="Message" required></v-textarea>
-                    <v-file-input name="file" accept="image/png, image/jpg" hide-input prepend-icon="mdi-image-plus" v-model="image" > </v-file-input>
+                    <v-file-input name="file" accept="image/png, image/jpeg, image/jpg" hide-input prepend-icon="mdi-image-plus" v-model="image" > </v-file-input>
 
                 </v-form>
             </v-card-text>
@@ -96,6 +96,7 @@ export default {
             body.append("content", this.dataPost.content);
             body.append("userId", this.dataPost.userId);
             this.dataPostS = JSON.stringify(this.dataPost);
+
             axios.post("http://localhost:3000/api/posts/", 
             body, 
             {headers: 
