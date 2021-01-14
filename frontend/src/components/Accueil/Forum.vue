@@ -33,7 +33,7 @@
 
                     <v-card-text class="v-card-text black--text forum__post__content" >
                         {{ post.content }}
-                        <img :src="post.imgUrl" alt="">
+                        <img v-if="post.imgUrl" class="img" :src="post.imgUrl" alt="">
                     </v-card-text>
 
                     
