@@ -17,11 +17,15 @@ exports.createPost = (req, res, next) => {
     let title = req.body.title;
     let userId = req.body.userId;
     let content = req.body.content; 
-    let imgUrl = `${req.protocol}://${req.get('host')}/images/${req.file.originalname}`
+    let imgUrl = '';
     let sqlInserts = [userId, title, content, imgUrl];
 
     if (req.file){
-        postsModels.createPost(sqlInserts)
+        imgUrl = `${req.protocol}://${req.get('host')}/images/${req.file.originalname}`;
+        } else {
+            imgUrl='';
+        }
+    postsModels.createPost(sqlInserts)
         .then(sqlInserts => {
             res.status(201).send({message : 'post créé'});
         })
@@ -30,7 +34,6 @@ exports.createPost = (req, res, next) => {
                 message : err.message || "une erreur est survenue lors de la creation du post !"
             });
         });
-    };
     
     
 }
@@ -43,6 +46,7 @@ exports.updatePost = (req, res, next) => {
     let postId = req.params.id;
     let sqlInserts1 = [postId];
     let sqlInserts2 = [title, content, postId, userId];
+
     postsModels.updatePost(sqlInserts1, sqlInserts2)
         .then((response) => {
             res.status(201).json(JSON.stringify(response));
