@@ -17,13 +17,13 @@ exports.createPost = (req, res, next) => {
     let title = req.body.title;
     let userId = req.body.userId;
     let content = req.body.content; 
-    let imgUrl = `${req.protocol}://${req.get('host')}/images/${req.body.imgUrl}`
+    let imgUrl = `${req.protocol}://${req.get('host')}/images/${req.file.originalname}`
     let sqlInserts = [userId, title, content, imgUrl];
 
     if (req.file){
         postsModels.createPost(sqlInserts)
         .then(sqlInserts => {
-            res.status(201).send(sqlInserts);
+            res.status(201).send({message : 'post créé'});
         })
         .catch(err => {
             res.status(400).send({

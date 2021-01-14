@@ -30,18 +30,14 @@
                         Par {{ post.firstName }} {{ post.lastName }}, le {{ post.date }} à {{ post.time }}
                     </v-card-subtitle>
 
+
                     <v-card-text class="v-card-text black--text forum__post__content" >
                         {{ post.content }}
+                        <img :src="post.imgUrl" alt="">
                     </v-card-text>
 
-                    <v-img v-if="dataPost.imgUrl !=null"
-                    :alt="'Image du Post'">           
-                     </v-img>
-
-
-                    <v-card-text class="py-0">
-                        
-                            
+                    
+                    <v-card-text class="py-0">   
                         <v-btn text @click="afficheCom(post.id)" title="Voir les commentaires">
                             <v-icon>mdi-comment-eye</v-icon>
                             Voir les commentaires 
@@ -75,22 +71,10 @@
                             <v-card-text class="pa-0 text--primary forum__comments__content ">
                                 {{ comment.comContent }}
                             </v-card-text>
+                            <v-btn title="Supprimer le commentaire" @click="deleteCom()">Supprimer le commentaire</v-btn>
 
                             
-                            <v-dialog v-model="dialogUpCom" max-width="500px">
-                                <v-card>
-                                    <v-card-title>Modifier mon commentaire</v-card-title>
-                                    <v-card-text>
-                                        <v-form ref="form" v-model="valid">
-                                            <v-textarea v-model="dataCom.content" color="black" :rules="comContentRules" :counter="255" label="Commentaire"></v-textarea>
-                                        </v-form>
-                                    </v-card-text>
-                                    <v-card-actions>
-                                        <v-btn text @click="dialogUpCom=false">Annuler</v-btn>
-                                        <v-btn text :disabled="!valid" @click="updateCom()">Valider</v-btn>
-                                    </v-card-actions>
-                                </v-card>
-                            </v-dialog>
+                        
                         </v-card>
 
                         <v-btn v-if="!afficheFrmCm" color="black white--text" title="commenter le post" class="ma-2" @click="afficheFormCom()">Commenter</v-btn>
@@ -272,13 +256,6 @@ export default {
         "top-header": TopHeader, 
     },
     mounted(){
-       /* const posts = document.getElementsByClassName("forum");
-    posts.forEach(() => {
-      if (
-        storage.getStorage("userId") != this.post.userId &&
-        storage.getStorage("idAdmin") == "false"
-      ) 
-    }); */
         this.userId = localStorage.userId;
         axios.get("http://localhost:3000/api/posts", {headers: {Authorization: 'Bearer ' + localStorage.token}})
             .then(response => {
@@ -299,13 +276,17 @@ export default {
         text-align: center;
         color: #154360;
     }
-    
+    .img-post{
+            width: 50%;
+            height: 50%;
+        }
     .forum{
         &__comments{
             &--ind{
                 position: relative;
             }
         }
+        
    }
 </style>
 

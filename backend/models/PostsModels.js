@@ -16,28 +16,27 @@ class PostsModels {
         })
     }
     createPost(sqlInserts){
-        console.log(sqlInserts)
-        let sql = 'INSERT INTO posts VALUES ?, ?, ?, ?, NOW()';
+        let sql = 'INSERT INTO posts SET userId= ?, title= ?, content= ?, imgUrl= ?, date= NOW()';
         //sql = mysql.format(sql, sqlInserts);
-        return new Promise((resolve) =>{
+        return new Promise((resolve, reject) =>{
             connectdb.query(sql, sqlInserts, function (err, result, fields) {
-                if (err) console.log(err, "test");
-                resolve({message : 'Nouveau post !'});
+                if (err) reject(err);
+                resolve(result);
             })       
         })
     }
     updatePost(sqlInserts1, sqlInserts2){
         let sql1 = 'SELECT * FROM posts where id = ?';
-        sql1 = mysql.format(sql1, sqlInserts1);
-        return new Promise((resolve) =>{
+        //sql1 = mysql.format(sql1, sqlInserts1);
+        return new Promise((resolve, reject) =>{
             connectdb.query(sql1, function (err, result, fields){
-                if (err) throw err;
+                if (err) reject (err);
                 if(sqlInserts2[3] == result[0].userId){
                     let sql2 = 'UPDATE posts SET title = ?, content = ?, imgUrl = ?, WHERE id = ? AND userId = ?';
-                    sql2 = mysql.format(sql2, sqlInserts2);
-                    connectdb.query(sql2, function (err, result, fields){
-                        if (err) throw err;
-                        resolve({message : 'Post modifié !'});
+                   //sql2 = mysql.format(sql2, sqlInserts2);
+                    connectdb.query(sql2, sqlInserts2, function (err, result, fields){
+                        if (err) reject(err);
+                        resolve(result);
                     })
                 }else{
                     reject({error: 'fonction indisponible'});

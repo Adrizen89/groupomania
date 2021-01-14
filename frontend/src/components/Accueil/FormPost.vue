@@ -103,7 +103,7 @@ export default {
             {'Content-Type': 'application/json', 
             Authorization: 'Bearer ' + localStorage.token}})
                 .then(response => {
-                    let rep = JSON.parse(response.data);
+                    let rep = response.data;
                     this.message = rep.message;
                     this.msg = true;
                     this.form = false;
