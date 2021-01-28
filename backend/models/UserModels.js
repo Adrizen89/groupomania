@@ -20,8 +20,9 @@ class UserModels {
         let sql = 'SELECT * FROM users WHERE email = ?';
         sql = mysql.format(sql, sqlInserts);
         
-        return new Promise((resolve, reject) =>{
-            connectdb.query(sql, function(err, result){
+                return new Promise((resolve, reject) =>{
+            connectdb.query(sql, function(err, result, field){
+              console.log(err);
                 if (err) reject({ err });
                 if (!result[0]){
                     reject ({ error : 'Utilisateur introuvable !'});

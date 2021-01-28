@@ -2,11 +2,11 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const connectdb = require('../connectdb.js');
 const mysql = require('mysql');
-const UserModels = require ('../Models/UserModels.js');
+const UserModel = require ('../Models/UserModels.js');
 const schema = require('../middleware/schemaPasswordValidator');
 const { response } = require('../app.js');
+const UserModels = new UserModel();
 
-let userModels = new UserModels();
 
 //      Fonction s'inscrire
 exports.signup = (req, res, next) => {
@@ -37,16 +37,16 @@ exports.signup = (req, res, next) => {
 
 //      Fonction se connecter
 exports.login = (req, res, next) => {
-    let email = req.body.email;
-    let password = req.body.password;
-    let sqlInserts = [email];
-    userModels.login(sqlInserts, password)
-        .then((response) =>{
-            res.status(200).json(JSON.stringify(response))
-        })
-        .catch((error) =>{
-            res.status(400).json(error)
-        })
+  let email = req.body.email;
+  let password = req.body.password;
+  let sqlInserts = [email];
+  UserModels.login(sqlInserts, password)
+      .then((response) =>{
+          res.status(200).json(JSON.stringify(response))
+      })
+      .catch((error) =>{
+          res.status(400).json(error)
+      })
 }
 exports.seeMyProfile = (req, res, next) => {
     const token = req.headers.authorization.split(' ')[1];

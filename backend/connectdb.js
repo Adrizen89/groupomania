@@ -3,8 +3,8 @@ console.log('Connexion à la base de données...');
 let connectdb = mysql.createConnection({ 
     host: 'localhost', 
     user: 'root', 
-    password: 'sbteam', 
-    database: 'groupomania', 
+    password: '', 
+    database: 'bdd_groupomania', 
 });
 connectdb.connect(function(err) { 
     if (err) throw err;
