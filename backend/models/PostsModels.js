@@ -67,8 +67,9 @@ class PostsModels {
 
 
     getComments(sqlInserts){
-        let sql = "SELECT comments.comContent, DATE_FORMAT(comments.date, '%d/%m/%Y à %H:%i:%s') AS date, comments.id, comments.userId, users.firstName, users.lastName FROM comments JOIN users on comments.userId = users.id WHERE postId = ? ORDER BY date";
-        sql = mysql.format(sql, sqlInserts);
+        
+        let sql = "SELECT comments.id, comments.comContent, comments.userId, DATE_FORMAT(DATE(comments.date), '%d/%m/%Y') AS date, TIME(comments.date) AS time, users.firstName, users.lastName FROM comments JOIN users ON comments.userId = users.id WHERE postId = ? ORDER BY date";
+        //sql = mysql.format(sql, sqlInserts);
         return new Promise((resolve) =>{
             connectdb.query(sql, function (err, result, fields){
                 if (err) throw err;
@@ -78,13 +79,14 @@ class PostsModels {
         })
     }
     createComment(sqlInserts){
-        let sql = 'INSERT INTO comments VALUES(NULL, ?, ?, NOW(), ?)';
-        sql = mysql.format(sql, sqlInserts);
-        return new Promise((resolve) =>{
-            connectdb.query(sql, function (err, result, fields){
-                if (err) throw err;
-                resolve({message : 'Nouveau commentaire !'})
-            })
+        let sql = 'INSERT INTO comments SET comContent= ?, userId= ?, postId= ?, date= NOW()';
+        //sql = mysql.format(sql, sqlInserts);
+        
+        return new Promise((resolve, reject) =>{
+            connectdb.query(sql, sqlInserts, function (err, result, fields) {
+                if (err) reject(err);
+                resolve(result);
+            })       
         })
     }
     updateComment(sqlInserts1, sqlInserts2){

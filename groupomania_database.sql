@@ -1,100 +1,52 @@
--- MySQL dump 10.13  Distrib 5.7.17, for macos10.12 (x86_64)
---
--- Host: localhost    Database: groupomania_database
--- ------------------------------------------------------
--- Server version	8.0.21
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+DROP DATABASE IF EXISTS groupomania;
+CREATE DATABASE IF NOT EXISTS groupomania;
+USE groupomania;
 
---
--- Table structure for table `comments`
---
+SET NAMES utf8;
 
-DROP TABLE IF EXISTS `comments`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `comments` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `userId` int unsigned NOT NULL,
-  `postId` int unsigned NOT NULL,
-  `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `comContent` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_comments_postId` (`postId`),
-  KEY `fk_comments_userId` (`userId`),
-  CONSTRAINT `fk_comments_postId` FOREIGN KEY (`postId`) REFERENCES `posts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk_comments_userId` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+/*Reset rapide en cas d'erreur*/
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS posts;
+DROP TABLE IF EXISTS comments;
+
+/*Création de la table des utilisateurs, avec id, pseudo, mail, password, nom et prénom */
+CREATE TABLE users (
+    id INT UNSIGNED NOT NULL  AUTO_INCREMENT,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    firstName VARCHAR(255) NOT NULL,
+    lastName VARCHAR(255) NOT NULL,
+    moderation INT UNSIGNED DEFAULT NULL,
+    PRIMARY KEY (id)
+) ENGINE = InnoDB ;
 
 
-
-LOCK TABLES `comments` WRITE;
-INSERT INTO `comments` VALUES (47,80,72, '2020-12-05 19:55:45', 'Super !');
-UNLOCK TABLES;
-
-
---
--- Table structure for table `posts`
---
-
-DROP TABLE IF EXISTS `posts`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `posts` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `userId` int unsigned NOT NULL,
-  `title` varchar(50) NOT NULL,
-  `content` text NOT NULL,
-  `imgUrl` varchar(200),
-  `date` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `fk_userId` (`userId`),
-  CONSTRAINT `fk_userId` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `users`
---
-
-DROP TABLE IF EXISTS `users`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `users` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `lastName` varchar(255) NOT NULL,
-  `firstName` varchar(255) NOT NULL,
-  `email` varchar(50) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `moderation` int unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=72 DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
+/*Création de la table des articles postés, avec id, titre, description, sujet (pour classement des posts), auteur, date du post, et éventuellement photo de l'article */
+CREATE TABLE posts (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    title VARCHAR(50) NOT NULL,
+    content TEXT,
+    imgUrl VARCHAR(200),
+    userId INT UNSIGNED NOT NULL,
+    date DATETIME NOT NULL,
+    PRIMARY KEY (id)
+) ENGINE = InnoDB ;
 
 
+/*Création de la table des commentaires, avec id, titre et description, article et auteur associés */
+CREATE TABLE comments (
+    id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    comContent VARCHAR(200) NOT NULL,
+    userId INT UNSIGNED NOT NULL,
+    postId INT UNSIGNED NOT NULL,
+    date DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id)
+) ENGINE = InnoDB ;
+    
+    
+ALTER TABLE posts ADD CONSTRAINT fk_usersId FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE;
 
-LOCK TABLES `posts` WRITE;
-INSERT INTO `posts` VALUES (80,72,'Bienvenue', 'Bienvenue sur le réseau social de Groupomania !\nAdrien', '',  '2020-12-05 19:45:45');
-UNLOCK TABLES;
+ALTER TABLE comments ADD CONSTRAINT fk_comments_postId FOREIGN KEY (postId) REFERENCES posts(id) ON DELETE CASCADE ON UPDATE CASCADE;
 
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2020-08-27 22:36:26
+ALTER TABLE comments ADD CONSTRAINT fk_comments_userId FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE ON UPDATE CASCADE;

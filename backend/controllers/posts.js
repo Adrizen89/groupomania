@@ -85,8 +85,8 @@ exports.getComments = (req, res, next) => {
 exports.createComment = (req, res, next) => { 
     let postId = req.params.id;
     let userId = req.body.userId;
-    let content = req.body.content;
-    let sqlInserts = [userId, postId, content];
+    let content = req.body.comContent;
+    let sqlInserts = [content, userId, postId];
     postsModels.createComment(sqlInserts)
         .then((response) =>{
 
@@ -98,7 +98,7 @@ exports.updateComment = (req, res, next) => {
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
     const userId = decodedToken.userId;
-    let content = req.body.content;
+    let content = req.body.comContent;
     let commentId = req.params.id;
     let sqlInserts1 = [commentId];
     let sqlInserts2 = [content, commentId, userId];

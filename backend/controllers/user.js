@@ -20,8 +20,8 @@ exports.signup = (req, res, next) => {
         bcrypt
         .hash(password, 10) // hashage + salage du password 
         .then (hash => {
-            let sqlInserts = [lastName, firstName, email, hash]; //ajout des valeurs dans un tableau = sqlInserts
-            userModels.signup(sqlInserts)
+            let sqlInserts = [email, hash, firstName, lastName]; //ajout des valeurs dans un tableau = sqlInserts
+            UserModels.signup(sqlInserts)
                 .then((response) =>{
                     res.status(201).json(JSON.stringify(response))//si ok user créé
                 })
@@ -30,7 +30,7 @@ exports.signup = (req, res, next) => {
                     res.status(400).json({error})//sinon erreur 
                 })
         })
-        .catch(error => res.status(500).json(error)) 
+        .catch(error => res.status(500).json(error))
     }
     
 };
@@ -45,6 +45,7 @@ exports.login = (req, res, next) => {
           res.status(200).json(JSON.stringify(response))
       })
       .catch((error) =>{
+          console.log(error, "error")
           res.status(400).json(error)
       })
 }
@@ -53,7 +54,7 @@ exports.seeMyProfile = (req, res, next) => {
     const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
     const userId = decodedToken.userId;
     let sqlInserts = [userId];
-    userModels.seeMyProfile(sqlInserts)
+    UserModels.seeMyProfile(sqlInserts)
         .then((response) =>{
             res.status(200).json(JSON.stringify(response))
         })
@@ -69,7 +70,7 @@ exports.updateUser = (req, res, next) => {
     let firstName = req.body.firstName;
     let lastName = req.body.lastName;
     let email = req.body.email;
-    let sqlInserts = [firstName, lastName, email, userId];
+    let sqlInserts = [userId, email, firstName, lastName];
     userModels.updateUser(sqlInserts)
         .then((response) =>{
             res.status(200).json(JSON.stringify(response))
