@@ -16,7 +16,7 @@ class PostsModels {
         })
     }
     createPost(sqlInserts){
-        let sql = 'INSERT INTO posts SET userId= ?, title= ?, content= ?, imgUrl= ?, date= NOW()';
+        let sql = 'INSERT INTO posts SET title= ?, content= ?, imgUrl= ?, userId= ?, date= NOW()';
         //sql = mysql.format(sql, sqlInserts);
         return new Promise((resolve, reject) =>{
             connectdb.query(sql, sqlInserts, function (err, result, fields) {
@@ -68,7 +68,7 @@ class PostsModels {
 
     getComments(sqlInserts){
         
-        let sql = "SELECT comments.id, comments.comContent, comments.userId, DATE_FORMAT(DATE(comments.date), '%d/%m/%Y') AS date, TIME(comments.date) AS time, users.firstName, users.lastName FROM comments JOIN users ON comments.userId = users.id WHERE postId = ? ORDER BY date";
+        let sql = "SELECT comments.id, comments.comContent, comments.userId, DATE_FORMAT(DATE(comments.date), '%d/%m/%Y') AS date, TIME(comments.date) AS time, users.firstName, users.lastName FROM comments JOIN users ON comments.userId = users.id WHERE comments.postId";
         //sql = mysql.format(sql, sqlInserts);
         return new Promise((resolve) =>{
             connectdb.query(sql, function (err, result, fields){
@@ -79,13 +79,13 @@ class PostsModels {
         })
     }
     createComment(sqlInserts){
-        let sql = 'INSERT INTO comments SET comContent= ?, userId= ?, postId= ?, date= NOW()';
+        let sql = 'INSERT INTO comments SET postId= ?, comContent= ?, userId= ?, date= NOW()';
         //sql = mysql.format(sql, sqlInserts);
-        
         return new Promise((resolve, reject) =>{
             connectdb.query(sql, sqlInserts, function (err, result, fields) {
                 if (err) reject(err);
                 resolve(result);
+                console.log(err);
             })       
         })
     }

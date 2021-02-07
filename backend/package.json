@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.20.0",
+    "base64image-to-file": "^1.2.0",
     "bcrypt": "^4.0.1",
     "express": "^4.17.1",
     "helmet": "^4.1.0",

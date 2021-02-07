@@ -33,8 +33,10 @@
 
                     <v-card-text class="v-card-text black--text forum__post__content" >
                         {{ post.content }}
-                        <img v-if="post.imgUrl" class="img" :src="post.imgUrl" alt="">
+                        
                     </v-card-text>
+                    <v-img :src="post.imgUrl" v-if="post.imgUrl !== ''">
+                    </v-img>
 
                     
                     <v-card-text class="py-0">   
@@ -67,12 +69,13 @@
                             <v-card-subtitle class="pa-0 forum__comments__name">
                                 Le {{ comment.date }}, {{ comment.firstName }} {{ comment.lastName }} commente :
                             </v-card-subtitle>
-
+                            
                             <v-card-text class="pa-0 text--primary forum__comments__content ">
                                 {{ comment.comContent }}
                             </v-card-text>
-                            <v-btn title="Supprimer le commentaire" @click="deleteCom()">Supprimer le commentaire</v-btn>
-
+                            <v-btn class="deleteCom" title="Supprimer le commentaire" @click="deleteCom(post.id)">
+                                <v-icon>mdi-delete</v-icon>
+                            </v-btn>
                             
                         
                         </v-card>
@@ -82,7 +85,7 @@
                         
                         <v-card v-if="afficheFrmCm">
                             <v-form  ref="form" class="ma-3" v-model="valid" v-if="form">
-                                <v-textarea background-color="#ECECEC" color="black" v-model="dataCom.content" :rules="comContentRules" :counter="255" label="Commentaire" autofocus required></v-textarea>
+                                <v-textarea background-color="#ECECEC" color="black" v-model="dataCom.comContent" :rules="comContentRules" :counter="255" label="Commentaire" autofocus required></v-textarea>
                             </v-form>
                             <v-btn :disabled="!valid" class="success ma-2" @click="sendCom(post.id)">Poster</v-btn>
                             
@@ -133,7 +136,7 @@ export default {
             dataPostS: "",
             dataCom:{
                 id: "",
-                content:"",
+                comContent:"",
                 userId: ""
             },
             dataComS: "",
@@ -164,7 +167,7 @@ export default {
                 .then(response => {
                     let rep = JSON.parse(response.data);
                     console.log(rep.message);
-                    this.dataCom.content="";
+                    this.dataCom.comContent="";
                     this.dataCom.userId="";
                     this.afficheFrmCm=false;
                 })
@@ -224,7 +227,7 @@ export default {
         },
         goDialogUpCom(comContent, comId){
             this.dataCom.id = comId;
-            this.dataCom.content = comContent;
+            this.dataCom.comContent = comContent;
             this.dialogUpCom = true; 
         },
         updateCom(){
@@ -234,7 +237,7 @@ export default {
                 .then(response => {
                     let rep = JSON.parse(response.data);
                     console.log(rep.message);
-                    this.dataCom.content = "";
+                    this.dataCom.comContent = "";
                     this.dataCom.userId = "";
                     this.afficheFrmCm = false;
                     this.dialogUpCom = false;
@@ -262,7 +265,6 @@ export default {
 
                 let posts = JSON.parse(response.data);
                 this.allPosts = posts;
-                console.log(posts, "test");
             })
             .catch(error => {
             console.log(error); 
@@ -280,6 +282,9 @@ export default {
             width: 50%;
             height: 50%;
         }
+    .deleteCom{
+        width: 5%;
+    }
     .forum{
         &__comments{
             &--ind{

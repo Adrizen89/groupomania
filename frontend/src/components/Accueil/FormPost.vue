@@ -23,14 +23,14 @@
                 <v-btn text href="/Accueil/Forum" color="black">Annuler</v-btn>
                 
       <div class="img-block mx-auto">
-        <img :src="srcImg" alt="photo à envoyer" class="img--inside" />
+        <img :src="imgUrl" alt="photo à envoyer" class="img--inside" />
         <v-btn
             aria-label="close"
             name="close"
           icon
           class="ml-auto mr-3 mt-3 btn--close "
           @click="
-            srcImg = '';
+            imgUrl = '';
             image = undefined;
           "
         >
@@ -73,14 +73,14 @@ export default {
             msg: false,
             message: "",
             image: undefined,
-            srcImg: ""
+            imgUrl: ""
         }
     },
     methods: {
         parseImg(evt) {
             var reader = new FileReader();
             reader.onload = e => {
-                this.srcImg = e.target.result;
+                this.imgUrl = e.target.result;
             };
             reader.readAsDataURL(evt);
         },
