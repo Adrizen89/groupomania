@@ -67,7 +67,6 @@ class PostsModels {
 
 
     getComments(sqlInserts){
-        
         let sql = "SELECT comments.id, comments.comContent, comments.userId, DATE_FORMAT(DATE(comments.date), '%d/%m/%Y') AS date, TIME(comments.date) AS time, users.firstName, users.lastName FROM comments JOIN users ON comments.userId = users.id WHERE comments.postId";
         //sql = mysql.format(sql, sqlInserts);
         return new Promise((resolve) =>{
@@ -79,7 +78,7 @@ class PostsModels {
         })
     }
     createComment(sqlInserts){
-        let sql = 'INSERT INTO comments SET postId= ?, comContent= ?, userId= ?, date= NOW()';
+        let sql = 'INSERT INTO comments VALUES(NULL, ?, ?, ?, NOW())';
         //sql = mysql.format(sql, sqlInserts);
         return new Promise((resolve, reject) =>{
             connectdb.query(sql, sqlInserts, function (err, result, fields) {
@@ -108,15 +107,15 @@ class PostsModels {
             })
         });
     }
-    deleteComment(sqlInserts1, sqlInserts2){
+    deleteComment(sqlInserts1, userId){
         let sql1 = 'SELECT * FROM comments where id = ?';
         sql1 = mysql.format(sql1, sqlInserts1);
         return new Promise((resolve, reject) =>{
             connectdb.query(sql1, function (err, result, fields){
                 if (err) throw err;
-                if(sqlInserts2[1] == result[0].userId){
+                if(userId == result[0].userId){
                     let sql2 = 'DELETE FROM comments WHERE id = ? AND userId = ?';
-                    sql2 = mysql.format(sql2, sqlInserts2);
+                    sql2 = mysql.format(sql2, [sqlInserts1[0], userId]);
                     connectdb.query(sql2, function (err, result, fields){
                         if (err) throw err;
                         resolve({message : 'Commentaire supprimé !'});

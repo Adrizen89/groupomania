@@ -4,7 +4,7 @@
         <v-card class="ma-12" raised>
             <v-img class="logo" src="../../assets/logo.png" width="100px" contain></v-img>
             <v-card-title class="my-3 justify-center">
-                <h1>Mon profil</h1>
+                <h1 style="color:black">Mon profil</h1>
             </v-card-title>
 
             <v-card-text class="ml-2 black--text">

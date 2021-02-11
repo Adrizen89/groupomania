@@ -70,8 +70,8 @@ exports.updateUser = (req, res, next) => {
     let firstName = req.body.firstName;
     let lastName = req.body.lastName;
     let email = req.body.email;
-    let sqlInserts = [userId, email, firstName, lastName];
-    userModels.updateUser(sqlInserts)
+    let sqlInserts = [email, firstName, lastName, userId];
+    UserModels.updateUser(sqlInserts)
         .then((response) =>{
             res.status(200).json(JSON.stringify(response))
         })
@@ -85,7 +85,7 @@ exports.deleteUser = (req, res, next) => {
     const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
     const userId = decodedToken.userId;
     let sqlInserts = [userId];
-    userModels.deleteUser(sqlInserts)
+    UserModels.deleteUser(sqlInserts)
         .then((response) =>{
             res.status(200).json(JSON.stringify(response))
         })

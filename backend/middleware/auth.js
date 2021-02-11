@@ -16,6 +16,7 @@ module.exports = (req, res, next) => {
             if (result[0]['COUNT(id)'] !== 1) {
                 throw 'Token invalide';
             } else {
+                req.body.userId = userId;
                 next();
             }
         })

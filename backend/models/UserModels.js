@@ -60,7 +60,7 @@ class UserModels {
     
     }
     updateUser(sqlInserts){
-        let sql = 'UPDATE users SET firstName = ?, lastName = ?, email = ? WHERE id = ?';
+        let sql = 'UPDATE users SET email = ?, firstName = ?, lastName = ? WHERE id = ?';
         sql = mysql.format(sql,sqlInserts);
         return new Promise((resolve, reject) =>{
             connectdb.query(sql, function(err, result){

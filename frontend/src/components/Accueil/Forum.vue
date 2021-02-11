@@ -3,12 +3,12 @@
 
         <top-header/>
         <div class="ml-12">
-            <h1 class="ma-4" style="color:#154360">Forum</h1>
+            <h1 class="ma-4" style="color:black">Forum</h1>
             
 
             <router-view></router-view>
             <v-container >
-                <v-btn class="ma-3"  @click="afficheForm">Créer un post</v-btn>
+                <v-btn class="btn-createPost ma-3"  @click="afficheForm">Créer un post</v-btn>
                 
                 <v-card class="forum__post ma-3 mt-6" v-for="(post, index) in allPosts" v-bind:key="index">
                     <div class="d-flex justify-space-between">
@@ -16,10 +16,10 @@
                             <h2 class="forum__post__title ml-0">{{ post.title }}</h2>
                         </v-card-title>
                         <v-card-actions class=" forum__post__manage" v-if="post.userId == userId">
-                            <v-btn class="forum__post__manage--btn" color="black" title="modifier le post" @click.stop="goDialogUpPost(post.title, post.content, post.id, post.imgUrl)" icon>
+                            <v-btn class="btn-modify forum__post__manage--btn" color="black" title="modifier le post" @click.stop="goDialogUpPost(post.title, post.content, post.id, post.imgUrl)" icon>
                                 <v-icon>mdi-pencil</v-icon>
                             </v-btn>
-                            <v-btn class="forum__post__manage--btn" color="black" title="supprimer le post" @click="deletePost(post.id)" icon>
+                            <v-btn class="btn-delete forum__post__manage--btn" color="black" title="supprimer le post" @click="deletePost(post.id)" icon>
                                 <v-icon>mdi-delete</v-icon>
                             </v-btn> 
                         </v-card-actions>
@@ -35,12 +35,12 @@
                         {{ post.content }}
                         
                     </v-card-text>
-                    <v-img :src="post.imgUrl" v-if="post.imgUrl !== ''">
+                    <v-img class="img-post" :src="post.imgUrl" v-if="post.imgUrl !== ''">
                     </v-img>
 
                     
                     <v-card-text class="py-0">   
-                        <v-btn text @click="afficheCom(post.id)" title="Voir les commentaires">
+                        <v-btn class="btn-seeCom" text @click="afficheCom(post.id)" title="Voir les commentaires">
                             <v-icon>mdi-comment-eye</v-icon>
                             Voir les commentaires 
                         </v-btn>
@@ -73,14 +73,14 @@
                             <v-card-text class="pa-0 text--primary forum__comments__content ">
                                 {{ comment.comContent }}
                             </v-card-text>
-                            <v-btn class="deleteCom" title="Supprimer le commentaire" @click="deleteCom(post.id)">
+                            <v-btn class="deleteCom" title="Supprimer le commentaire" @click="deleteCom(comment.id)">
                                 <v-icon>mdi-delete</v-icon>
                             </v-btn>
                             
                         
                         </v-card>
 
-                        <v-btn v-if="!afficheFrmCm" color="black white--text" title="commenter le post" class="ma-2" @click="afficheFormCom()">Commenter</v-btn>
+                        <v-btn v-if="!afficheFrmCm" color="black white--text" title="commenter le post" class="ma-2 btn-commenter" @click="afficheFormCom()">Commenter</v-btn>
                         
                         
                         <v-card v-if="afficheFrmCm">
@@ -274,16 +274,35 @@ export default {
 }
 </script>
 <style lang="scss">
+@mixin tablet{
+        @media screen and (max-width : 790px) {
+            @content;
+        }
+    }
+@mixin big-mobile{
+        @media screen and (max-width : 580px) {
+            @content;
+        }
+    }
+@mixin mid-mobile{
+        @media screen and (max-width : 425px) {
+            @content;
+        }
+    }
     h1{
         text-align: center;
         color: #154360;
     }
     .img-post{
-            width: 50%;
-            height: 50%;
+            width: 40%;
+            margin: auto;
         }
-    .deleteCom{
-        width: 5%;
+    .d-flex{
+        @include tablet{
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: center;
+        }
     }
     .forum{
         &__comments{
@@ -291,7 +310,47 @@ export default {
                 position: relative;
             }
         }
+        .v-card-text{
+            @include tablet{
+                font-size: 0.7em;
+            }
+        }
+        .forum__post__title{
+            @include tablet{
+                font-size: 1em;
+            }
+            @include big-mobile{
+                font-size: 0.8em;
+                text-align: center;
+            }
+        }
+        .btn-createPost{
+            @include tablet{
+                font-size: 0.8em;
+            }
+            @include big-mobile{
+                font-size: 0.6em;
+            }
+        }
         
+        .v-card__actions{
+            @include tablet{
+                width: 20%;
+                padding: 0;
+            }
+            @include big-mobile{
+                justify-content: center;
+            }
+        }
+        .v-btn{
+        @include tablet{
+            font-size: 0.8em;
+        }
+        @include big-mobile{
+            font-size: 0.6em;
+        }
+
+    }
    }
 </style>
 

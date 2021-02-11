@@ -21,25 +21,6 @@
                 
                 <v-btn form="form" :disabled="!valid" type="submit" class="success" >Poster</v-btn>
                 <v-btn text href="/Accueil/Forum" color="black">Annuler</v-btn>
-                
-      <div class="img-block mx-auto">
-        <img :src="imgUrl" alt="photo à envoyer" class="img--inside" />
-        <v-btn
-            aria-label="close"
-            name="close"
-          icon
-          class="ml-auto mr-3 mt-3 btn--close "
-          @click="
-            imgUrl = '';
-            image = undefined;
-          "
-        >
-          <v-icon>
-            mdi-close
-          </v-icon>
-        </v-btn>
-      </div>
-    
             </v-card-actions>
             
 
@@ -77,13 +58,6 @@ export default {
         }
     },
     methods: {
-        parseImg(evt) {
-            var reader = new FileReader();
-            reader.onload = e => {
-                this.imgUrl = e.target.result;
-            };
-            reader.readAsDataURL(evt);
-        },
         imageInput(){
             this.file = this.$refs.file.files[0];
             this.img = URL.createObjectURL(this.file);

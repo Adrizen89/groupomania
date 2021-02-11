@@ -2,7 +2,7 @@
     <div class="head">
         <v-navigation-drawer
             v-model="drawer"
-            color=#1A5276
+            color=black
             expand-on-hover
             mini-variant
             mini-variant-width=45

@@ -2,7 +2,7 @@
     <v-app id="moderation" class="moderation">
         <top-header/>
         <div class="ml-12">
-            <h1 class="ma-4">Modération</h1>
+            <h1 class="ma-4" style="color:black">Modération</h1>
             <v-container>
                 <v-btn class="ma-3" color="black white--text" @click="clickPosts">Voir les posts</v-btn>
                 <v-btn class="ma-3" color="black white--text" @click="clickComments">Voir les commentaires</v-btn>
@@ -62,7 +62,14 @@ export default {
             allPosts: [],
             allComments: [],
             showPosts: true,
-            showComments: false
+            showComments: false,
+            dataPost: {
+                id: "",
+                title:"",
+                content:"",
+                imgUrl:"",
+                userId:"",
+            },
         }
     },
     components: {
@@ -123,5 +130,44 @@ export default {
 </script>
 
 <style lang="scss">
+@mixin tablet{
+        @media screen and (max-width : 790px) {
+            @content;
+        }
+    }
+@mixin big-mobile{
+        @media screen and (max-width : 580px) {
+            @content;
+        }
+    }
+@mixin mid-mobile{
+        @media screen and (max-width : 425px) {
+            @content;
+        }
+    }
+.d-flex{
+        @include tablet{
+            display: flex;
+            flex-direction: column-reverse;
+            align-items: center;
+        }
+    }
+    .v-btn__content{
+        @include tablet{
+            font-size: 0.8em;
+        }
+        @include big-mobile{
+            font-size: 0.6em;
+        }
 
+    }
+    .forum__post__title{
+            @include tablet{
+                font-size: 1em;
+            }
+            @include big-mobile{
+                font-size: 0.8em;
+                text-align: center;
+            }
+        }
 </style>

@@ -14,49 +14,18 @@ exports.getAllPosts = (req, res, next) => {
             res.status(200).json(JSON.stringify(response));
         });
 }
-exports.createPost = (req, res, next) => {
-
-    const base64Image = req.body.image;
-    const date = new Date();
-    const currentDate = date.getFullYear() + "-" + (date.getMonth()+1) + "-" + date.getDate();
-    const userId = req.body.userId;
-    const fileName = userId + "-" + currentDate;
-  
-    // create an image with the a given name ie 'image'
-    base64ImageToFile(base64Image, 'images/', fileName, function(err) {
-      if(err) {
-        return console.error(err);
-      }
-      const bindings = {
-        message: req.body.message,
-        userId: req.body.userId,
-        // ...imageObject,
-        imgUrl: fileName + '.gif',
-      }
-      const sqlQuery = "INSERT INTO `messages` SET ?"
-      const preparedStatement = db.format(sqlQuery, [bindings])
-      db.query(preparedStatement, (error, result, field) => {
-        if (error) {
-          return res.status(400).json({ error })
-        }
-        return res.status(201).json({ message: 'Votre message a été posté !' })
-    
-      })
-    });
-    
-  }
-/*exports.createPost = (req, res, next) => { 
+exports.createPost = (req, res, next) => { 
     let title = req.body.title;
     let userId = req.body.userId;
     let content = req.body.content; 
     let imgUrl = '';
-    let sqlInserts = [title, content, imgUrl, userId];
-
+    
     if (req.file){
-        imgUrl = `${req.protocol}://${req.get('host')}/images/${req.file.originalname}`;
+        imgUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
         } else {
             imgUrl='';
         }
+        let sqlInserts = [title, content, imgUrl, userId];
     postsModels.createPost(sqlInserts)
         .then(sqlInserts => {
             res.status(201).send({message : 'post créé'});
@@ -69,7 +38,7 @@ exports.createPost = (req, res, next) => {
         });
     
     
-}*/
+}
 exports.updatePost = (req, res, next) => {
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
@@ -125,7 +94,6 @@ exports.createComment = (req, res, next) => {
             res.status(201).json(JSON.stringify(response));
         })
 }
-
 exports.updateComment = (req, res, next) => {
     const token = req.headers.authorization.split(' ')[1];
     const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
@@ -146,7 +114,7 @@ exports.updateComment = (req, res, next) => {
 exports.deleteComment = (req, res, next) => {
     let commentId = req.params.id;
     let sqlInserts = [commentId];
-    postsModels.deleteComment(sqlInserts)
+    postsModels.deleteComment(sqlInserts, req.body.userId)
         .then((response) =>{
             res.status(200).json(JSON.stringify(response));
         })

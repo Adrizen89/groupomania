@@ -38,6 +38,7 @@
 
 <style lang="scss">
     #auth {
+        min-width: 100vh;
         background: no-repeat center top/80% url("../assets/icon-left-font-monochrome-black.png") ;
         display: flex;
         flex-direction: row;
