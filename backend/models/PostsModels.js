@@ -7,7 +7,7 @@ class PostsModels {
     
 
     getAllPosts(){
-        let sql = "SELECT posts.id, posts.userId, posts.title, posts.content, posts.imgUrl, DATE_FORMAT(DATE(posts.date), '%d/%m/%Y') AS date, TIME(posts.date) AS time, users.lastName, users.firstName FROM posts JOIN users ON posts.userId = users.id ORDER BY posts.date DESC";
+        let sql = "SELECT posts.id, posts.userId, posts.title, posts.content, posts.imgUrl, DATE_FORMAT(DATE(posts.date), '%d/%m/%Y') AS date, TIME(posts.date) AS time, users.lastName, users.firstName, comments.postId, comments.comContent, comments.userId, DATE_FORMAT(DATE(comments.date), '%d/%m/%Y') FROM posts INNER JOIN users ON posts.userId = users.id INNER JOIN comments ON posts.id = comments.postId ORDER BY posts.date DESC";
         return new Promise((resolve) =>{
             connectdb.query(sql, function (err, result, fields) {
                 if (err) throw err;
@@ -78,8 +78,8 @@ class PostsModels {
         })
     }
     createComment(sqlInserts){
-        let sql = 'INSERT INTO comments VALUES(NULL, ?, ?, ?, NOW())';
-        //sql = mysql.format(sql, sqlInserts);
+        let sql = 'INSERT INTO comments SET postId = ?, comContent = ?, userId = ?, date = NOW()';
+        sql = mysql.format(sql, sqlInserts);
         return new Promise((resolve, reject) =>{
             connectdb.query(sql, sqlInserts, function (err, result, fields) {
                 if (err) reject(err);
