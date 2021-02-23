@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const connectdb = require('../connectdb.js');
+const db = require('dotenv');
 const mysql = require('mysql');
 const UserModel = require ('../Models/UserModels.js');
 const schema = require('../middleware/schemaPasswordValidator');
@@ -49,9 +50,11 @@ exports.login = (req, res, next) => {
           res.status(400).json(error)
       })
 }
+
+//Voir son profil
 exports.seeMyProfile = (req, res, next) => {
     const token = req.headers.authorization.split(' ')[1];
-    const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
+    const decodedToken = jwt.verify(token, process.env.TOKEN);
     const userId = decodedToken.userId;
     let sqlInserts = [userId];
     UserModels.seeMyProfile(sqlInserts)
@@ -63,9 +66,11 @@ exports.seeMyProfile = (req, res, next) => {
             res.status(400).json(error)
         })
 }   
+
+//Modifier son compte
 exports.updateUser = (req, res, next) => {
     const token = req.headers.authorization.split(' ')[1];
-    const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
+    const decodedToken = jwt.verify(token, process.env.TOKEN);
     const userId = decodedToken.userId;
     let firstName = req.body.firstName;
     let lastName = req.body.lastName;
@@ -79,10 +84,11 @@ exports.updateUser = (req, res, next) => {
             res.status(400).json(error)
         })
 }
- 
+
+//Supprimer le compte
 exports.deleteUser = (req, res, next) => {
     const token = req.headers.authorization.split(' ')[1];
-    const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
+    const decodedToken = jwt.verify(token, process.env.TOKEN);
     const userId = decodedToken.userId;
     let sqlInserts = [userId];
     UserModels.deleteUser(sqlInserts)

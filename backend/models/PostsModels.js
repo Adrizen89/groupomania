@@ -5,9 +5,9 @@ class PostsModels {
     constructor() {
     }
     
-
+    //Modèle afficher les posts
     getAllPosts(){
-        let sql = "SELECT posts.id, posts.userId, posts.title, posts.content, posts.imgUrl, DATE_FORMAT(DATE(posts.date), '%d/%m/%Y') AS date, TIME(posts.date) AS time, users.lastName, users.firstName, comments.postId, comments.comContent, comments.userId, DATE_FORMAT(DATE(comments.date), '%d/%m/%Y') FROM posts INNER JOIN users ON posts.userId = users.id INNER JOIN comments ON posts.id = comments.postId ORDER BY posts.date DESC";
+        let sql = "SELECT posts.id, posts.userId, posts.title, posts.content, posts.imgUrl, DATE_FORMAT(DATE(posts.date), '%d/%m/%Y') AS date, TIME(posts.date) AS time, users.lastName, users.firstName, comments.postId, comments.comContent, comments.userId, DATE_FORMAT(DATE(comments.date), '%d/%m/%Y') FROM posts LEFT JOIN users ON posts.userId = users.id LEFT JOIN comments ON posts.id = comments.postId ORDER BY posts.date DESC";
         return new Promise((resolve) =>{
             connectdb.query(sql, function (err, result, fields) {
                 if (err) throw err;
@@ -15,9 +15,11 @@ class PostsModels {
             });
         })
     }
+
+    //Modèle créer post
     createPost(sqlInserts){
         let sql = 'INSERT INTO posts SET title= ?, content= ?, imgUrl= ?, userId= ?, date= NOW()';
-        //sql = mysql.format(sql, sqlInserts);
+        sql = mysql.format(sql, sqlInserts);
         return new Promise((resolve, reject) =>{
             connectdb.query(sql, sqlInserts, function (err, result, fields) {
                 if (err) reject(err);
@@ -25,6 +27,8 @@ class PostsModels {
             })       
         })
     }
+
+    //Modèle modifier post
     updatePost(sqlInserts1, sqlInserts2){
         let sql1 = 'SELECT * FROM posts where id = ?';
         sql1 = mysql.format(sql1, sqlInserts1);
@@ -44,6 +48,8 @@ class PostsModels {
             })
         });
     }
+
+    //Modèle supprimer post
     deletePost(sqlInserts1, sqlInserts2){
         let sql1 = 'SELECT * FROM posts where id = ?';
         sql1 = mysql.format(sql1, sqlInserts1);
@@ -65,10 +71,10 @@ class PostsModels {
         })
     }
 
-
+    //Modèle afficher les commentaires
     getComments(sqlInserts){
-        let sql = "SELECT comments.id, comments.comContent, comments.userId, DATE_FORMAT(DATE(comments.date), '%d/%m/%Y') AS date, TIME(comments.date) AS time, users.firstName, users.lastName FROM comments JOIN users ON comments.userId = users.id WHERE comments.postId";
-        //sql = mysql.format(sql, sqlInserts);
+        let sql = "SELECT comments.id, comments.comContent, comments.userId, DATE_FORMAT(DATE(comments.date), '%d/%m/%Y') AS date, TIME(comments.date) AS time, users.firstName, users.lastName FROM comments JOIN users ON comments.userId = users.id WHERE comments.postId = ?";
+        sql = mysql.format(sql, sqlInserts);
         return new Promise((resolve) =>{
             connectdb.query(sql, function (err, result, fields){
                 if (err) throw err;
@@ -77,6 +83,8 @@ class PostsModels {
         
         })
     }
+
+    //Modèle créer commentaire
     createComment(sqlInserts){
         let sql = 'INSERT INTO comments SET postId = ?, comContent = ?, userId = ?, date = NOW()';
         sql = mysql.format(sql, sqlInserts);
@@ -88,25 +96,8 @@ class PostsModels {
             })       
         })
     }
-    updateComment(sqlInserts1, sqlInserts2){
-        let sql1 = 'SELECT * FROM comments where id = ?';
-        sql1 = mysql.format(sql1, sqlInserts1);
-        return new Promise((resolve) =>{
-            connectdb.query(sql1, function (err, result, fields){
-                if (err) throw err;
-                if(sqlInserts2[2] == result[0].userId){
-                    let sql2 = 'UPDATE comments SET comContent = ? WHERE id = ? AND userId = ?';
-                    sql2 = mysql.format(sql2, sqlInserts2);
-                    connectdb.query(sql2, function (err, result, fields){
-                        if (err) throw err;
-                        resolve({message : 'Commentaire modifié !'});
-                    })
-                }else{
-                    reject({error: 'fonction indisponible'});
-                }
-            })
-        });
-    }
+    
+    //Modèle supprimer commentaire
     deleteComment(sqlInserts1, userId){
         let sql1 = 'SELECT * FROM comments where id = ?';
         sql1 = mysql.format(sql1, sqlInserts1);

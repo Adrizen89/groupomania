@@ -4,8 +4,12 @@
         <div class="ml-12">
             <h1 class="ma-4" style="color:black">Modération</h1>
             <v-container>
+                <!-- Bouton voir les posts -->
                 <v-btn class="ma-3" color="black white--text" @click="clickPosts">Voir les posts</v-btn>
+                <!-- Bouton voir les commentaires -->
                 <v-btn class="ma-3" color="black white--text" @click="clickComments">Voir les commentaires</v-btn>
+
+                <!-- Voir les posts -->
                 <div v-if="showPosts">
                     <v-card class="forum__post ma-3 mt-6" v-for="(post, index) in allPosts" v-bind:key="index">
                         <v-card-title>
@@ -27,6 +31,8 @@
                         </v-card-actions>
                     </v-card>
                 </div>
+
+                <!-- Voir les commentaires -->
                 <div v-if="showComments">
                     <v-card class="forum__comments--ind my-1 mx-2 pa-0" color="#ECECEC" v-for="(comment, index) in allComments" v-bind:key="index" outlined>
                         <v-card-subtitle class=" pb-0 forum__comments__name">
@@ -76,14 +82,17 @@ export default {
         "top-header": TopHeader,
     },
     methods: {
+        //voir posts
         clickPosts(){
             this.showPosts = true,
             this.showComments = false
         },
+        //voir commentaires
         clickComments(){
             this.showPosts = false,
             this.showComments = true
         },
+        //supprimer post
         deletePost(pId){
             axios.delete("http://localhost:3000/api/moderation/post/" + pId, {headers: {Authorization: 'Bearer ' + localStorage.token}})
                 .then(response => {
@@ -96,6 +105,7 @@ export default {
                     console.log(error);    
                 })
         },
+        //supprimer commentaire
         deleteComment(cId){
             axios.delete("http://localhost:3000/api/moderation/comment/" + cId, {headers: {Authorization: 'Bearer ' + localStorage.token}})
                 .then(response => {

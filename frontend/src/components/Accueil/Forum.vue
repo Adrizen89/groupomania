@@ -8,14 +8,16 @@
 
             <router-view></router-view>
             <v-container >
+                <!-- Bouton pour créer un post -->
                 <v-btn class="btn-createPost ma-3"  @click="afficheForm">Créer un post</v-btn>
                 
+                <!-- Les posts -->
                 <v-card class="forum__post ma-3 mt-6" v-for="(post, index) in allPosts" v-bind:key="index">
                     <div class="d-flex justify-space-between">
                         <v-card-title>
                             <h2 class="forum__post__title ml-0">{{ post.title }}</h2>
                         </v-card-title>
-                        <v-card-actions class=" forum__post__manage" v-if="post.userId == userId">
+                        <v-card-actions class=" forum__post__manage" v-if="post.userId = userId">
                             <v-btn class="btn-modify forum__post__manage--btn" color="black" title="modifier le post" @click.stop="goDialogUpPost(post.title, post.content, post.id, post.imgUrl)" icon>
                                 <v-icon>mdi-pencil</v-icon>
                             </v-btn>
@@ -25,7 +27,7 @@
                         </v-card-actions>
 
                     </div>
-
+                    <!-- Le post -->
                     <v-card-subtitle class="forum__post__name">
                         Par {{ post.firstName }} {{ post.lastName }}, le {{ post.date }} à {{ post.time }}
                     </v-card-subtitle>
@@ -38,7 +40,7 @@
                     <v-img class="img-post" :src="post.imgUrl" v-if="post.imgUrl !== ''">
                     </v-img>
 
-                    
+                    <!-- Voir les commentaires -->
                     <v-card-text class="py-0">   
                         <v-btn class="btn-seeCom" text @click="afficheCom(post.id)" title="Voir les commentaires">
                             <v-icon>mdi-comment-eye</v-icon>
@@ -46,7 +48,7 @@
                         </v-btn>
                     </v-card-text>
 
-            
+                    <!-- Fenêtre modifier le post -->
                     <v-dialog v-model="dialogUpPost" max-width="500px">
                         <v-card>
                             <v-card-title>Modifier mon post</v-card-title>
@@ -63,7 +65,7 @@
                         </v-card>
                     </v-dialog>
 
-                
+                    <!-- Les commentaires -->
                     <div class="forum__comments" v-if="postId === post.id">
                         <v-card class="forum__comments--ind my-1 mx-2 pa-3 " color="#ECECEC" v-for="(comment, index) in allComments" v-bind:key="index" outlined>
                             <v-card-subtitle class="pa-0 forum__comments__name">
@@ -79,10 +81,7 @@
                             
                         
                         </v-card>
-
                         <v-btn v-if="!afficheFrmCm" color="black white--text" title="commenter le post" class="ma-2 btn-commenter" @click="afficheFormCom()">Commenter</v-btn>
-                        
-                        
                         <v-card v-if="afficheFrmCm">
                             <v-form  ref="form" class="ma-3" v-model="valid" v-if="form">
                                 <v-textarea background-color="#ECECEC" color="black" v-model="dataCom.comContent" :rules="comContentRules" :counter="255" label="Commentaire" autofocus required></v-textarea>
@@ -113,7 +112,6 @@ export default {
             postId: "",
             dialogUpCom: false,
             dialogUpPost: false,
-
             valid: true,
             titleRules: [
                 v => !!v || 'Titre de la publication',

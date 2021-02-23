@@ -37,11 +37,13 @@ export default {
     data(){
         return{
             valid: true,
+            //Condition pour le titre
             titleRules: [
                 v => !!v || 'Titre de la publication',
                 v => (v && v.length <= 50) || 'Le titre doit faire moins de 50 caractères',
 
             ],
+            //Condition pour le texte
             contentRules: [
                 v => !!v || 'Ecrivez votre message',
             ],
@@ -58,11 +60,12 @@ export default {
         }
     },
     methods: {
+        //Insert d'image
         imageInput(){
             this.file = this.$refs.file.files[0];
             this.img = URL.createObjectURL(this.file);
         },
-        
+        //Envoyer et poster le post
         sendPost(evt){
             let body = new FormData();
             body.append("file", evt.target[3].files[0]);

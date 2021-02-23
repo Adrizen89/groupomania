@@ -25,7 +25,7 @@ Télécharger le repository et suivez les instructions ci-après pour installer 
 * Ouvrez votre terminal
 * Allez dans le dossier backend : `cd groupomania-master/backend` 
 * Installez toutes les dépendances du projet : `npm install`
-* Démarrez le serveur Node.js : `nodemon server`
+* Démarrez le serveur Node .js : `nodemon server`
 
 ## Installation et démarrage du Frontend
 

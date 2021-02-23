@@ -1,4 +1,5 @@
 const express = require('express');
+const db = require('dotenv').config();
 const bodyParser = require('body-parser');
 const xss = require('xss-clean');
 const helmet = require("helmet");
@@ -7,6 +8,7 @@ const app = express();
 const routesPosts = require('./routes/routesPosts');
 const routesUsers = require('./routes/routesUsers');
 const routesMod = require('./routes/routesMod');
+
 
 app.use(xss());
 app.use (helmet()); 

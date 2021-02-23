@@ -1,19 +1,21 @@
 const connectdb = require('../connectdb.js');
+const db =require('dotenv');
 const mysql = require('mysql');
 const jwt = require('jsonwebtoken');
 const PostsModels = require ('../Models/PostsModels.js');
 const multer = require ('../middleware/multer-config');
-const base64ImageToFile = require('base64image-to-file');
 
 let postsModels = new PostsModels();
 
-
+//Afficher tous les posts
 exports.getAllPosts = (req, res, next) => {
     postsModels.getAllPosts()
         .then((response) => {
             res.status(200).json(JSON.stringify(response));
         });
 }
+
+//Créer un post
 exports.createPost = (req, res, next) => { 
     let title = req.body.title;
     let userId = req.body.userId;
@@ -39,9 +41,11 @@ exports.createPost = (req, res, next) => {
     
     
 }
+
+//Modifier un post
 exports.updatePost = (req, res, next) => {
     const token = req.headers.authorization.split(' ')[1];
-    const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
+    const decodedToken = jwt.verify(token, process.env.TOKEN);
     const userId = decodedToken.userId;
     let title = req.body.title;
     let content = req.body.content;
@@ -58,9 +62,11 @@ exports.updatePost = (req, res, next) => {
             res.status(400).json(JSON.stringify(error));
         })
 }
+
+//Supprimer un post
 exports.deletePost = (req, res, next) => {
     const token = req.headers.authorization.split(' ')[1];
-    const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
+    const decodedToken = jwt.verify(token, process.env.TOKEN);
     const userId = decodedToken.userId;
     let postId = req.params.id;
     let sqlInserts1 = [postId];
@@ -75,7 +81,7 @@ exports.deletePost = (req, res, next) => {
         })
 }
 
-
+//Afficher les commentaires
 exports.getComments = (req, res, next) => {
     let postId = req.params.id;
     let sqlInserts = [postId];
@@ -84,6 +90,8 @@ exports.getComments = (req, res, next) => {
             res.status(200).json(JSON.stringify(response));
         })
 }
+
+//Créer un commentaire
 exports.createComment = (req, res, next) => { 
     let postId = req.params.id;
     let userId = req.body.userId;
@@ -94,23 +102,8 @@ exports.createComment = (req, res, next) => {
             res.status(201).json(JSON.stringify(response));
         })
 }
-exports.updateComment = (req, res, next) => {
-    const token = req.headers.authorization.split(' ')[1];
-    const decodedToken = jwt.verify(token, 'RANDOM_TOKEN_SECRET');
-    const userId = decodedToken.userId;
-    let content = req.body.comContent;
-    let commentId = req.params.id;
-    let sqlInserts1 = [commentId];
-    let sqlInserts2 = [content, commentId, userId];
-    postsModels.updatePost(sqlInserts1, sqlInserts2)
-        .then((response) => {
-            res.status(201).json(JSON.stringify(response));
-        })
-        .catch((error) =>{
-            console.log(error);
-            res.status(400).json(JSON.stringify(error));
-        })
-}
+
+//Supprimer un commentaire 
 exports.deleteComment = (req, res, next) => {
     let commentId = req.params.id;
     let sqlInserts = [commentId];

@@ -6,19 +6,21 @@
             <v-card-title class="my-3 justify-center">
                 <h1 style="color:black">Mon profil</h1>
             </v-card-title>
-
+            <!-- Fenêtre du profil -->
             <v-card-text class="ml-2 black--text">
                 <p>Prénom : {{ dataGet.firstName }}</p>
                 <p>Nom : {{ dataGet.lastName }}</p>
                 <p>E-mail : {{ dataGet.email }}</p>
             </v-card-text>
 
+            <!-- Boutons modifier et supprimer le profil -->
             <v-card-actions class="d-flex justify-space-between">
                 <v-btn @click.stop="dialogUp=true" title="modifier mes informations">Modifier</v-btn>
                 <v-btn @click.stop="dialogDel=true" title="supprimer mon profil" color="red">Supprimer</v-btn>
             </v-card-actions>
         </v-card>
 
+        <!-- Fenêtre modifier profil -->  
         <v-dialog persistent v-model="dialogUp" max-width="600px">
             <v-card>
                 <v-card-title>Modifier mon profil</v-card-title>
@@ -35,7 +37,7 @@
                 </v-card-actions>
             </v-card>
         </v-dialog>
-
+        <!-- Fenêtre confirmation de suppression -->
         <v-dialog v-model="dialogDel" max-width="350px">
             <v-card>
                 <v-card-title>
@@ -98,8 +100,8 @@ export default {
         }
     },
     methods: {
+        //supprimer profil
         deleteUser() {
-            
             axios.delete("http://localhost:3000/api/auth/", {headers: {Authorization: 'Bearer ' + localStorage.token}})
             .then(response => {
                 let rep = JSON.parse(response.data);
@@ -113,6 +115,7 @@ export default {
                 this.msg = error  
             })
         },
+        //modifier le profil
         updateUser() {
             this.dataUpS = JSON.stringify(this.dataUp);
             axios.put("http://localhost:3000/api/auth/", this.dataUpS, {headers: {'Content-Type': 'application/json', Authorization: 'Bearer ' + localStorage.token}})

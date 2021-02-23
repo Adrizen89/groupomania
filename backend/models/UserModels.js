@@ -1,4 +1,5 @@
 const connectdb = require('../connectdb.js');
+const db =require('dotenv');
 const mysql = require('mysql');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -6,6 +7,8 @@ const jwt = require('jsonwebtoken');
 class UserModels {
     constructor() {
     }
+
+    //Modèle s'inscrire
     signup(sqlInserts){
         let sql = 'INSERT INTO users VALUES(NULL, ?, ?, ?, ?, NULL)';
         sql = mysql.format(sql, sqlInserts);
@@ -16,6 +19,8 @@ class UserModels {
             })
         })
     }
+
+    //Modèle se connecter
     login(sqlInserts, password){
         let sql = 'SELECT * FROM users WHERE email = ?';
         sql = mysql.format(sql, sqlInserts);
@@ -35,7 +40,7 @@ class UserModels {
                                 token: jwt.sign(
                                     { userId: result[0].id,
                                     moderation: result[0].moderation },
-                                    'RANDOM_TOKEN_SECRET',
+                                    process.env.TOKEN,
                                     { expiresIn: '24h' } 
                                 ),
                                 moderation: result[0].moderation
@@ -47,6 +52,8 @@ class UserModels {
         
         })
     }
+
+    //Modèle voir compte
     seeMyProfile(sqlInserts){
         let sql = 'SELECT firstName, lastName, email FROM users WHERE id = ?';
         sql = mysql.format(sql,sqlInserts);
@@ -59,6 +66,8 @@ class UserModels {
         })
     
     }
+
+    //Modèle modifier compte
     updateUser(sqlInserts){
         let sql = 'UPDATE users SET email = ?, firstName = ?, lastName = ? WHERE id = ?';
         sql = mysql.format(sql,sqlInserts);
@@ -70,6 +79,8 @@ class UserModels {
 
         })
     }
+
+    //Modèle supprimer compte
     deleteUser(sqlInserts){
         let sql = 'DELETE FROM users WHERE id = ?'; 
         sql = mysql.format(sql,sqlInserts);
